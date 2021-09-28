@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AnnoncesController extends AbstractController
 {
     /**
+     * @Route("/", name="index")
      * @Route("/annonces", name="annonces")
      */
     public function index(): Response
