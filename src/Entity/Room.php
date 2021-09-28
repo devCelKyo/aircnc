@@ -20,7 +20,7 @@ class Room
     private $id;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text")
      */
     private $summary;
 
@@ -30,28 +30,27 @@ class Room
     private $description;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $capacity;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $superficy;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $price;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Owner::class, inversedBy="room")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Owner::class, inversedBy="rooms")
      */
     private $owner;
 
@@ -75,7 +74,7 @@ class Room
         return $this->summary;
     }
 
-    public function setSummary(?string $summary): self
+    public function setSummary(string $summary): self
     {
         $this->summary = $summary;
 
@@ -99,7 +98,7 @@ class Room
         return $this->capacity;
     }
 
-    public function setCapacity(int $capacity): self
+    public function setCapacity(?int $capacity): self
     {
         $this->capacity = $capacity;
 
@@ -111,7 +110,7 @@ class Room
         return $this->superficy;
     }
 
-    public function setSuperficy(int $superficy): self
+    public function setSuperficy(?int $superficy): self
     {
         $this->superficy = $superficy;
 
@@ -123,7 +122,7 @@ class Room
         return $this->price;
     }
 
-    public function setPrice(int $price): self
+    public function setPrice(?int $price): self
     {
         $this->price = $price;
 
@@ -135,7 +134,7 @@ class Room
         return $this->address;
     }
 
-    public function setAddress(string $address): self
+    public function setAddress(?string $address): self
     {
         $this->address = $address;
 

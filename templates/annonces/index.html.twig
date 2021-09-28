@@ -4,5 +4,10 @@
 
 {% block body %}
 <h1>Bienvenue sur AirCNC</h1>
-<p>Un peu vide mais ça arrive</p>
+<h2>Annonces</h2>
+{% for room in rooms %}
+<div class="room_block">
+<h3><a href="{{ urls[loop.index0] }}">{{ room.summary }}</a></h3>
+</div
+{% endfor %}
 {% endblock %}

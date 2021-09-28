@@ -27,7 +27,7 @@ class Owner
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $familyname;
+    private $lastname;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -40,13 +40,13 @@ class Owner
     private $country;
 
     /**
-     * @ORM\OneToMany(targetEntity=Room::class, mappedBy="owner", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Room::class, mappedBy="owner", cascade={"persist"})
      */
     private $rooms;
 
     public function __construct()
     {
-        $this->room = new ArrayCollection();
+        $this->rooms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,14 +66,14 @@ class Owner
         return $this;
     }
 
-    public function getFamilyname(): ?string
+    public function getLastname(): ?string
     {
-        return $this->familyname;
+        return $this->lastname;
     }
 
-    public function setFamilyname(string $familyname): self
+    public function setLastname(string $lastname): self
     {
-        $this->familyname = $familyname;
+        $this->lastname = $lastname;
 
         return $this;
     }
@@ -105,7 +105,7 @@ class Owner
     /**
      * @return Collection|Room[]
      */
-    public function getRoom(): Collection
+    public function getRooms(): Collection
     {
         return $this->rooms;
     }

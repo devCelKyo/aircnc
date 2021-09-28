@@ -2,6 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Region;
+use App\Entity\Room;
+use App\Entity\Owner;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -12,8 +15,17 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+    
+    $owner = new Owner();
+    $owner->setFirstname("Alpha");
+    $owner->setLastname("Beta");
+    $owner->setCountry("FR");
+    $manager->persist($owner);
+    
+    $manager->flush();
+    
     //...
-
+    
     $region = new Region();
     $region->setCountry("FR");
     $region->setName("Ile de France");
@@ -27,7 +39,7 @@ class AppFixtures extends Fixture
     $this->addReference(self::IDF_REGION_REFERENCE, $region);
 
     // ...
-
+    
     $room = new Room();
     $room->setSummary("Beau poulailler ancien à Évry");
     $room->setDescription("très joli espace sur paille");
