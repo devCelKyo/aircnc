@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Toto\Truc;
 use App\Entity\Room;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,7 @@ class AnnoncesController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $rooms = $em->getRepository(Room::Class)->findAll();
+        
         $urls = [];
         foreach($rooms as $room) {
             $urls[] = $this->generateUrl('room_show', ['id' => $room->getId()]);
@@ -34,7 +36,19 @@ class AnnoncesController extends AbstractController
     public function showAction(Room $room): Response
     {
         return $this->render('annonces/show.html.twig', ['room' => $room]);
-    } 
+    }
 
+    /**
+     * @Route("/rooms/delete/{id}", name="room_delete", methods="GET")
+     */
+    public function deleteRoom(Room $room): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($room);
+
+        $em->flush();
+
+        return $this->redirectToRoute('room_index');
+    }
 
 }
