@@ -24,6 +24,17 @@ class UserFixtures extends Fixture
         $user->setLastname('B');
         $user->setUsername('Nadir');
         $user->setPassword($this->encoder->encodePassword($user, 'password'));
+        $user->addRole('ROLE_ADMIN');
+
+        $manager->persist($user);
+        $manager->flush();
+
+        $user = new User();
+        $user->setEmail("truc2@truc.com");
+        $user->setFirstname('A');
+        $user->setLastname('B');
+        $user->setUsername('Nadir2');
+        $user->setPassword($this->encoder->encodePassword($user, 'password'));
 
         $manager->persist($user);
         $manager->flush();

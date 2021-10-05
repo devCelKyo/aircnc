@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=RoomRepository::class)
  */
 class Room
-{
+{   
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -127,6 +127,14 @@ class Room
         $this->price = $price;
 
         return $this;
+    }
+
+    public function getCustomerPrice(): ?int
+    {
+        $site_tax = 0.05;
+        $tva = 0.2;
+        // Prix exigé par le proprio + TVA + frais d'agence
+        return $this->price*(1+$site_tax)*(1+$tva);
     }
 
     public function getAddress(): ?string

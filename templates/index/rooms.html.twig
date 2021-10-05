@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annonces{% endblock %}
+
+{% block body %}
+<h1>Liste des annonces disponibles</h1>
+
+{% for room in rooms %}
+
+<div class="room_block">
+    <h2><a href="{{ path('home_room_show', {'id': room.id}) }}">{{ room.summary }}</a></h2>
+    <p>{{ room.description }}</p>
+</div>
+
+{% endfor %}
+
+{% endblock %}

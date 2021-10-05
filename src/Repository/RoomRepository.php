@@ -19,6 +19,11 @@ class RoomRepository extends ServiceEntityRepository
         parent::__construct($registry, Room::class);
     }
 
+    public function findAllFreeRooms()
+    {
+        return $this->findAll();
+    }
+
     // /**
     //  * @return Room[] Returns an array of Room objects
     //  */

@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/owner/room")
@@ -20,9 +21,17 @@ class RoomController extends AbstractController
      */
     public function index(RoomRepository $roomRepository): Response
     {
-        return $this->render('room/index.html.twig', [
-            'rooms' => $roomRepository->findAll(),
-        ]);
+        // Si l'utilisateur est un administrateur, on montre toutes les rooms
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
+        {
+            $rooms = $roomRepository->findAll();
+        } // Sinon ça veut dire que c'est un propriétaire, et on ne montre que les rooms qui sont à lui (Simple bon sens, mais on dira RGPD pour avoir l'air cool)
+        else
+        {
+            $rooms = $roomRepository->findBy(['owner' => $this->getUser()->getOwner()]);
+        }
+
+        return $this->render('room/index.html.twig', ['rooms' => $rooms]);
     }
 
     /**
