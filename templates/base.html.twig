@@ -4,11 +4,17 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
 {% endblock %}
+
+{% block scripts %}
+<script src="{{ asset('js/jquery.js') }}"></script>
+{% endblock %}
 </head>
 
 <body>
+<div class="container">
 {% block body %}
 cc
 {% endblock %}
+</div>
 </body>
 </html>

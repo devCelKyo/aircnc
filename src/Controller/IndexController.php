@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Room;
 use App\Repository\RoomRepository;
+use App\Entity\Region;
+use App\Repository\RegionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,10 +15,12 @@ class IndexController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index(): Response
+    public function index(RegionRepository $regionRepository): Response
     {
+        $regions = $regionRepository->findAll();
+
         return $this->render('index/index.html.twig', [
-            'controller_name' => 'IndexController',
+            'regions' => $regions,
         ]);
     }
 

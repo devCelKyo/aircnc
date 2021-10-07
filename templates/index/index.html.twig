@@ -5,4 +5,8 @@
 {% block body %}
 <h1>Hello !</h1>
 
+{% for region in regions %}
+<h1>{{ region.name }}</h1>
+{% endfor %}
+
 {% endblock %}
