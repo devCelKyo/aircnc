@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Aircnc{% endblock %}
+{% block title %}Aircnc - Couettes et Cafés à la demande{% endblock %}
 
 {% block body %}
 <h1>Hello !</h1>
 
 {% for region in regions %}
-<h1>{{ region.name }}</h1>
+<h1><a href="{{ path('home_room', {'region': region.name}) }}">{{ region.name }}</a></h1>
 {% endfor %}
 
 {% endblock %}

@@ -25,11 +25,12 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/rooms", name="home_room")
+     * @Route("/{region}/rooms", name="home_room", methods={"GET"})
      */
-    public function rooms(RoomRepository $roomRepository): Response
+    public function rooms(string $region, RegionRepository $regionRepository): Response
     {
-        $rooms = $roomRepository->findAllFreeRooms();
+        $region = $regionRepository->findOneBy(['name' => $region]);
+        $rooms = $region->getRooms();
         return $this->render('index/rooms.html.twig', [ 'rooms' => $rooms ]);
     }
 

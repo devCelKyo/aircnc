@@ -54,6 +54,11 @@ class User implements UserInterface
      */
     private $owner;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Client::class, cascade={"persist", "remove"})
+     */
+    private $client;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -183,6 +188,18 @@ class User implements UserInterface
     public function setOwner(?Owner $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }
