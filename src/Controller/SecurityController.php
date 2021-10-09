@@ -72,7 +72,8 @@ class SecurityController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-
+            
+            $this->get('session')->getFlashBag()->add('success', 'Compte crée avec succès, vous pouvez vous connecter désormais.');
             return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
 

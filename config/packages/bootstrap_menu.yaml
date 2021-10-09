@@ -8,8 +8,5 @@ bootstrap_menu:
         owner:
           label: 'Espace propriétaire'
           route: 'room_index'
-        connexion:
-          label: 'Connexion'
-          route: 'app_login'
 
         

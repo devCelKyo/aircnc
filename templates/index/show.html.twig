@@ -5,4 +5,5 @@
 {% block body %}
 <h1>{{ room.summary }}</h1>
 <p>{{ room.description }}</p>
+<a class="btn btn-success" href="{{ path('home_reservation', {'id': room.id}) }}" role="button">Réserver</a>
 {% endblock %}

@@ -12,23 +12,12 @@
 </head>
 
 <body>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-       <div class="container">
-          <a class="navbar-brand" href="{{ path('index') }}">AirCNC</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                {{ render_bootstrap_menu('main') }}
-             </ul>
-          </div>
-        </div>
-</nav>
-
-<div class="container">
-{% block body %}
-cc
-{% endblock %}
-</div>
+   {{ include('navbar.html.twig') }}
+   <div class="container">
+      {{ include('flashbag.html.twig') }}
+      {% block body %}
+      cc
+      {% endblock %}
+   </div>
 </body>
 </html>
