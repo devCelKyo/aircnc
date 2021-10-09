@@ -2,10 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\UserType;
+use App\Entity\Owner;
+use App\Entity\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
 {
@@ -35,10 +41,41 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="app_register")
+     * @Route("/register", name="app_register", methods={"GET", "POST"})
      */
-    public function register(): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        
+        $user = new User();
+        $form = $this->createForm(UserType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
+
+            // Création des objets owner et client liés à user
+            $owner = new Owner();
+            $owner->setFirstname($user->getFirstname());
+            $owner->setLastname($user->getLastname());
+            $owner->setAddress($form->get('address')->getData());
+            $owner->setCountry($form->get('country')->getData());
+
+            $client = new Client();
+            $client->setFirstname($user->getFirstname());
+            $client->setLastname($user->getLastname());
+            $client->setAddress($form->get('address')->getData());
+            $client->setCountry($form->get('country')->getData());
+
+            $user->setOwner($owner);
+            $user->setClient($client);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('security/register.html.twig', ['form' => $form->createView()]);
     }
 }
