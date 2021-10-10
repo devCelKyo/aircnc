@@ -6,4 +6,12 @@
 <h1>{{ room.summary }}</h1>
 <p>{{ room.description }}</p>
 <a class="btn btn-success" href="{{ path('home_reservation', {'id': room.id}) }}" role="button">Réserver</a>
+
+<h1>Commentaires</h1>
+{{ form(form) }}
+{% for commentaire in commentaires %}
+<div class="commentaire-block">
+<span class="author-span">{{ commentaire.author }}</span> : {{ commentaire.content }}
+</div>
+{% endfor %}
 {% endblock %}

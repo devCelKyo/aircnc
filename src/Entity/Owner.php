@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Room;
 use App\Repository\OwnerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -135,5 +136,10 @@ class Owner
     public function __toString()
     {
         return $this->firstname;
+    }
+
+    public function owns(Room $room)
+    {
+        return in_array($room, $this->getRooms());
     }
 }

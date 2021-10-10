@@ -44,9 +44,15 @@ class Client
      */
     private $reservations;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="author")
+     */
+    private $commentaires;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,5 +136,74 @@ class Client
         }
 
         return $this;
+    }
+
+    public function hasReserved(Room $room): bool
+    {
+        $reservations = $this->getReservations();
+
+        foreach($reservations as $reservation) {
+            if ($reservation->getRoom() == $room) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return Collection|Commentaire[]
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): self
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires[] = $commentaire;
+            $commentaire->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): self
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getAuthor() === $this) {
+                $commentaire->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        $response = $this->firstname;
+        $response.= ' '.$this->lastname[0];
+        $response.= '.';
+
+        return $response;
+    }
+
+    public function canCommentOn(Room $room)
+    {
+        // Renvoie 0 si le client n'a pas réservé, 2 s'il a déjà commenté, 1 si c'est bon
+        if (!$this->hasReserved($room)) {
+            return 0;
+        }
+
+        $commentaires = $this->getCommentaires();
+        foreach($commentaires as $commentaire)
+        {
+            if ($commentaire->getRoom() == $room) {
+                return 2;
+            }
+        }
+
+        return 1;
     }
 }

@@ -2,13 +2,17 @@
 
 namespace App\Controller;
 
+use \DateTime;
 use App\Entity\Room;
-use App\Repository\RoomRepository;
 use App\Entity\Region;
-use App\Repository\RegionRepository;
 use App\Entity\Reservation;
+use App\Entity\Commentaire;
+use App\Repository\RoomRepository;
+use App\Repository\RegionRepository;
 use App\Repository\ReservationRepository;
+use App\Repository\CommentaireRepository;
 use App\Form\ReservationType;
+use App\Form\CommentaireType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,11 +51,30 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/rooms/{id}", name="home_room_show", methods={"GET"})
+     * @Route("/rooms/{id}", name="home_room_show", methods={"GET", "POST"})
      */
-    public function show(Room $room): Response
+    public function show(Room $room, Request $request, CommentaireRepository $commentaireRepository): Response
     {
-        return $this->render('index/show.html.twig', ['room' => $room]);
+        $commentaire = new Commentaire();
+        $form = $this->createForm(CommentaireType::class, $commentaire);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $commentaire->setDate(new DateTime());
+            $commentaire->setStatus("EN ATTENTE DE CONFIRMATION");
+            $commentaire->setAuthor($this->getUser()->getClient());
+            $commentaire->setRoom($room);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($commentaire);
+            $entityManager->flush();
+
+            $this->get('session')->getFlashBag()->add('message', 'Votre commentaire est en cours de modération et sera publié sous peu.');
+            return $this->redirectToRoute('home_room_show', ['id' => $room->getId()]);
+        }
+
+        $commentaires = $commentaireRepository->findBy(['room' => $room]);
+        return $this->render('index/show.html.twig', ['room' => $room, 'form' => $form->createView(), 'commentaires' => $commentaires]);
     }
 
     /**

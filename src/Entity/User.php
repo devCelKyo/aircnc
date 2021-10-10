@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Room;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -202,5 +203,15 @@ class User implements UserInterface
         $this->client = $client;
 
         return $this;
+    }
+
+    public function hasReserved(Room $room)
+    {
+        return $this->getClient()->hasReserved($room);
+    }
+
+    public function owns(Room $room)
+    {
+        return $this->getOwner()->owns($room);
     }
 }
