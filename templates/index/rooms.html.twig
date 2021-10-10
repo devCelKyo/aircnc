@@ -5,6 +5,7 @@
 {% block body %}
 <h1>Liste des annonces disponibles</h1>
 
+{% if rooms %}
 {% for room in rooms %}
 
 <div class="room_block">
@@ -13,5 +14,10 @@
 </div>
 
 {% endfor %}
+{% else %}
+<div class="alert alert-warning">
+    Il semblerait qu'il n'y ait pas de chambre dispo aujourd'hui... Réessayez demain !
+</div>
+{% endif %}
 
 {% endblock %}

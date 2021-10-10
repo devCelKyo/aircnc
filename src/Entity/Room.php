@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use \Datetime;
 use App\Repository\RoomRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -278,5 +279,20 @@ class Room
         }
 
         return $this;
+    }
+    
+    // Fonction super utile qui dit si la Room est libre aujourd'hui !
+    public function isFree(): bool
+    {
+        $reservations = $this->getReservations();
+        $now = new DateTime();
+        foreach($reservations as $reservation) {
+            if ($reservation->getDateDebut() <= $now && $reservation->getDateFin() >= $now)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

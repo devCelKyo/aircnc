@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes réservations{% endblock %}
+
+{% block body %}
+{% if reservations %}
+{% for reservation in reservations %}
+<h1><a href="{{ path('home_room_show', {'id': reservation.getRoom.getId}) }}">{{ reservation.getRoom.getSummary }}</a> - Confirmé : {{ reservation.confirmed }}</h1>
+{% endfor %}
+
+{% else %}
+<div class="alert alert-info">Vous n'avez pas encore de réservation.</div>
+{% endif %}
+
+{% endblock %}

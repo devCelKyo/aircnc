@@ -35,7 +35,15 @@ class IndexController extends AbstractController
     {
         $region = $regionRepository->findOneBy(['name' => $region]);
         $rooms = $region->getRooms();
-        return $this->render('index/rooms.html.twig', [ 'rooms' => $rooms ]);
+        // On a récupéré toutes les Rooms, on va trier à l'aide de isFree pour récupérer seulement les Rooms libres aujourd'hui
+
+        $freeRooms = array();
+        foreach($rooms as $room) {
+            if ($room->isFree()) {
+                $freeRooms[] = $room;
+            }
+        }
+        return $this->render('index/rooms.html.twig', [ 'rooms' => $freeRooms ]);
     }
 
     /**
@@ -71,5 +79,15 @@ class IndexController extends AbstractController
         // Collecte des réservations à venir avec une fonction définie dans le repository
         $upcomingReservations = $reservationRepository->findUpcomingReservations($room);
         return $this->render('index/reservation.html.twig', ['room' => $room, 'form' => $form->createView(), 'reservations' => $upcomingReservations]);
+    }
+
+    /**
+     * @Route("/reservations", name="home_user_reservations")
+     */
+    public function reservations(ReservationRepository $reservationRepository): Response
+    {
+        $reservations = $reservationRepository->findBy(['client' => $this->getUser()->getClient()]);
+
+        return $this->render('index/user_reservations.html.twig', ['reservations' => $reservations]);
     }
 }
