@@ -24,6 +24,7 @@ class RoomController extends AbstractController
         // Si l'utilisateur est un administrateur, on montre toutes les rooms
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
         {
+            $this->get('session')->getFlashBag()->add('message', 'Vous êtes connecté en tant qu\'administrateur, vous voyez donc tous les Couette et Cafés');
             $rooms = $roomRepository->findAll();
         } // Sinon ça veut dire que c'est un propriétaire, et on ne montre que les rooms qui sont à lui (Simple bon sens, mais on dira RGPD pour avoir l'air cool)
         else
