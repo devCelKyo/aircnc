@@ -5,41 +5,14 @@
 {% block body %}
     <h1>Espace propriétaire</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Summary</th>
-                <th>Description</th>
-                <th>Capacity</th>
-                <th>Superficy</th>
-                <th>Price</th>
-                <th>Address</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for room in rooms %}
-            <tr>
-                <td>{{ room.id }}</td>
-                <td>{{ room.summary }}</td>
-                <td>{{ room.description }}</td>
-                <td>{{ room.capacity }}</td>
-                <td>{{ room.superficy }}</td>
-                <td>{{ room.price }}</td>
-                <td>{{ room.address }}</td>
-                <td>
-                    <a href="{{ path('room_show', {'id': room.id}) }}">show</a>
-                    <a href="{{ path('room_edit', {'id': room.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% for room in rooms %}
+    <div class="owner-room-block">
+        <h1><a href="{{ path('room_show', {'id': room.id}) }}">{{ room.summary }}</a></h1>
+    </div>
+    {% endfor %}
 
-    <a href="{{ path('room_new') }}">Create new</a>
+    {% if not rooms %}
+    <div class="alert alert-info">Vous n'avez pas encore de chambre.</div>
+    {% endif %}
+    <a class="btn btn-primary" role="button" href="{{ path('room_new') }}">Create new</a>
 {% endblock %}

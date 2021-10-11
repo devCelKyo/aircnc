@@ -69,7 +69,7 @@ class Room
     private $imageName;
 
     /**
-     * @Vich\UploadableField(mapping="pastes", fileNameProperty="imageName")
+     * @Vich\UploadableField(mapping="rooms", fileNameProperty="imageName")
      * @var File
      */
     private $imageFile;
