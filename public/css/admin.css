@@ -1,0 +1,28 @@
+.sidebar {
+    position: fixed; 
+    display: inline-block; 
+    height:100vh; 
+    background-color: #313a46;
+}
+.admin-content {
+    margin-left: 270px; 
+    padding-top: 10px;
+    padding-left: 30px; 
+    background-color: #f0f1f5; 
+    min-height: 100vh;
+}
+.nav-item {
+    transition: background-color 1s;
+}
+.nav-item:hover {
+    background-color: #7070ff;
+}
+.dashboard-row {
+    margin-bottom: 2em;
+}
+.widget-flat {
+    border: none;
+}
+.success-icon {
+    color: green;
+}

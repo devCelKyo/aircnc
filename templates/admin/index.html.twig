@@ -1,0 +1,68 @@
+{% extends 'adminbase.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h4 class="page-title">Tableau de bord</h4>
+    <div class="row dashboard-row">
+        <div class="col-xl-5 col-lg-6">
+            <div class="card widget-flat">
+                <div class="card-body">
+                <h5 class="text-muted">Couettes et cafés</h5>
+                <h3 class="mt-3 mb-3">{{ nbreRooms }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-5 col-lg-6">
+            <div class="card widget-flat">
+                <div class="card-body">
+                <h5 class="text-muted">Propriétaires</h5>
+                <h3 class="mt-3 mb-3">{{ nbreOwners }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row dashboard-row">
+        <div class="col-xl-5 col-lg-6">
+            <div class="card widget-flat">
+                <div class="card-body">
+                {% if nbreReservations == 0 %}
+                    <span class="success-icon">{{ include('icones/done.html.twig') }}</span>
+                {% else %}
+                    <span class="danger-icon">{{ include('icones/warning.html.twig') }}</span>
+                {% endif %}
+                <h5 class="text-muted">Réservations à traiter</h5>
+                <h3 class="mt-3 mb-3">{{ nbreReservations }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-5 col-lg-6">
+            <div class="card widget-flat">
+                <div class="card-body">
+                {% if nbreReservations == 0 %}
+                    <span class="success-icon">{{ include('icones/done.html.twig') }}</span>
+                {% else %}
+                    <span class="danger-icon">{{ include('icones/warning.html.twig') }}</span>
+                {% endif %}
+                <h5 class="text-muted">Commentaires à modérer</h5>
+                <h3 class="mt-3 mb-3">{{ nbreCommentaires }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row dashboard-row">
+        <div class="col-lg-12">
+            <div class="card widget-flat">
+                <div class="card-body">
+                    <h5 class="text-muted">Messages de contact</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

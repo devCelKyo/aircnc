@@ -103,6 +103,20 @@ class Commentaire
         return $this;
     }
 
+    public function valider(): self
+    {
+        $this->setStatus('VALIDE');
+
+        return $this;
+    }
+
+    public function signaler(): self
+    {
+        $this->setStatus('EN ATTENTE DE MODERATION');
+        
+        return $this;
+    }
+
     public function getAuthor(): ?Client
     {
         return $this->author;

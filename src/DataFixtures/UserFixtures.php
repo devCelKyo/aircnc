@@ -24,7 +24,7 @@ class UserFixtures extends Fixture
         $user->setLastname('B');
         $user->setUsername('Nadir');
         $user->setPassword($this->encoder->encodePassword($user, 'password'));
-        $user->addRole('ROLE_ADMIN');
+        $user->addRole('ROLE_SUPER_ADMIN');
 
         $manager->persist($user);
         $manager->flush();

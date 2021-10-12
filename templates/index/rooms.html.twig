@@ -5,15 +5,18 @@
 {% block body %}
 <h1>Liste des annonces disponibles</h1>
 
-{% if rooms %}
+{% if rooms is not empty %}
+<div class="card-deck">
 {% for room in rooms %}
-
-<div class="room_block">
-    <h2><a href="{{ path('home_room_show', {'id': room.id}) }}">{{ room.summary }}</a></h2>
-    <p>{{ room.description }}</p>
-</div>
-
+    <div class="card" style="display: inline-block; width: 18rem;">
+        <img class="card-img-top" src="{{ vich_uploader_asset(room, 'imageFile') }}">
+        <div class="card-body">
+            <h2 class="card-title"><a href="{{ path('home_room_show', {'id': room.id}) }}">{{ room.summary }}</a></h2>
+            <p>{{ room.description }}</p>
+        </div>
+    </div>
 {% endfor %}
+</div>
 {% else %}
 <div class="alert alert-warning">
     Il semblerait qu'il n'y ait pas de chambre dispo aujourd'hui... Réessayez demain !

@@ -47,7 +47,7 @@ class IndexController extends AbstractController
                 $freeRooms[] = $room;
             }
         }
-        return $this->render('index/rooms.html.twig', [ 'rooms' => $freeRooms ]);
+        return $this->render('index/rooms.html.twig', [ 'rooms' => $rooms ]);
     }
 
     /**
@@ -74,7 +74,7 @@ class IndexController extends AbstractController
         }
 
         $commentaires = $commentaireRepository->findBy(['room' => $room]);
-        return $this->render('index/show.html.twig', ['room' => $room, 'form' => $form->createView(), 'commentaires' => $commentaires]);
+        return $this->render('index/show.html.twig', ['room' => $room, 'region' => $room->getRegions()[0], 'form' => $form->createView(), 'commentaires' => $commentaires]);
     }
 
     /**

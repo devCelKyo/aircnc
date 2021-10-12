@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class RoomType extends AbstractType
@@ -31,8 +32,10 @@ class RoomType extends AbstractType
             ->add('superficy', TextType::class)
             ->add('price', TextType::class)
             ->add('address', TextType::class)
-            //->add('imageName', TextType::class,  ['disabled' => true])
+            ->add('regions', ChoiceType::class, ['choices' => $regions, 'choice_label' => function (?Region $region) { return $region->getName(); }, 'expanded' => false, 'multiple' => true, 'mapped' => false])
             ->add('imageFile', VichImageType::class, ['required' => false, 'mapped' => false])
+            ->add('submit', SubmitType::class)
+
         ;
     }
 

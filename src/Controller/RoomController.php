@@ -46,6 +46,13 @@ class RoomController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $room->setImageFile($form->get('imageFile')->getData());
+            $regions = $form->get('regions')->getData();
+
+            foreach($regions as $region) {
+                $room->addRegion($region);
+            }
+
+            $room->setOwner($this->getUser()->getOwner());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($room);
