@@ -19,7 +19,7 @@
                             <td>{{ commentaire.note }}/5<br><span class="text-muted font-13">Note</span></td>
                             <td>{{ commentaire.author }}<br><span class="text-muted font-13">Auteur</span></td>
                             <td>{{ commentaire.date|date("d/m/Y") }}<br><span class="text-muted font-13">Date</span></td>
-                            <td><a href="{{ path('admin_room_edit', {'id': commentaire.id}) }}" class="btn btn-primary" role="button">Éditer</a> <a href="{{ path('admin_room_delete', {'id': commentaire.id   }) }}" class="btn btn-danger" role="button">Supprimer</a></td>
+                            <td><a href="{{ path('admin_moderation_confirm', {'id': commentaire.id}) }}" class="btn btn-success" role="button">Confirmer</a> <a href="{{ path('admin_moderation_delete', {'id': commentaire.id}) }}" class="btn btn-danger" role="button">Supprimer</a></td>
                         </tr>
                     {% endfor %}
                     </table>

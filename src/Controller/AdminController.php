@@ -4,10 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Room;
 use App\Entity\Reservation;
+use App\Entity\Commentaire;
+use App\Entity\Owner;
+use App\Entity\User;
 use App\Repository\RoomRepository;
 use App\Repository\OwnerRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\CommentaireRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,5 +115,71 @@ class AdminController extends AbstractController
         $commentaires = $commentaireRepository->findBy(['status' => 'EN ATTENTE DE MODERATION']);
 
         return $this->render('admin/moderation.html.twig', ['commentaires' => $commentaires]);
+    }
+
+    /**
+     * @Route("/moderation/confirm/{id}", name="admin_moderation_confirm")
+     */
+    public function confirm(Commentaire $commentaire): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $commentaire->setStatus('VALIDE');
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('message', 'Le commentaire a bien été validé.');
+        return $this->redirectToRoute('admin_moderation');
+    }
+
+    /**
+     * @Route("/moderation/delete/{id}", name="admin_moderation_delete")
+     */
+    public function deleteCom(Commentaire $commentaire): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($commentaire);
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('message', 'Le commentaire a bien été supprimé.');
+        return $this->redirectToRoute('admin_moderation');
+    }
+
+    /**
+     * @Route("/owners", name="admin_owners")
+     */
+    public function showOwners(OwnerRepository $ownerRepository): Response
+    {
+        $owners = $ownerRepository->findAll();
+
+        return $this->render('admin/owners.html.twig', ['owners' => $owners]);
+    }
+
+    /**
+     * @Route("/owners/edit/{id}", name="admin_owner_edit", methods={"GET", "POST"})
+     */
+    public function ownerEdit(Request $request, Owner $owner): Response
+    {
+
+    }
+
+    /**
+     * @Route("/owners/delete/{id}", name="admin_owner_delete")
+     */
+    public function ownerDelete(Owner $owner): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($owner);
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('message', 'Le propriétaire a bien été supprimé.');
+        return $this->redirectToRoute('admin_owners');
+    }
+
+    /**
+     * @Route("/superadmin", name="superadmin", methods={"GET", "POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function superadmin(Request $request, UserRepository $userRepository): Response
+    {
+
     }
 }
