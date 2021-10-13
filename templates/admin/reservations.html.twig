@@ -1,0 +1,30 @@
+{% extends 'adminbase.html.twig' %}
+
+{% block title %}Réservations{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h4 class="page-title">Réservations</h4>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card widget-flat">
+                <div class="card-body">
+                    <table class="table table-borderless table-centered mb-0">
+                    <tbody>
+                    {% for reservation in reservations %}
+                        <tr class="admin-room">
+                            <td>{{ reservation.id }}</td>
+                            <td>{{ reservation.room.summary }}<br><span class="text-muted font-13">Intitulé</span></td>
+                            <td>{{ reservation.client }}<br><span class="text-muted font-13">Client</span></td>
+                            <td>{{ reservation.getDateDebut|date("d/m/Y") }}<br><span class="text-muted font-13">Date de début</span></td>
+                            <td>{{ reservation.getDateFin|date("d/m/Y") }}<br><span class="text-muted font-13">Date de fin</span></td>
+                            <td><a href="{{ path('admin_reservation_validate', {'id': reservation.id}) }}" class="btn btn-success">Valider</a> <a href="{{ path('admin_reservation_cancel', {'id': reservation.id}) }}" class="btn btn-danger" role="button">Annuler</a></td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

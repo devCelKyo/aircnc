@@ -12,7 +12,7 @@
     min-height: 100vh;
 }
 .nav-item {
-    transition: background-color 1s;
+    transition: background-color 0.5s;
 }
 .nav-item:hover {
     background-color: #7070ff;
@@ -25,4 +25,15 @@
 }
 .success-icon {
     color: green;
+}
+.danger-icon {
+    color: red;
+}
+.admin-room {
+    border-bottom: 1px solid rgb(233 233 233);
+    transition: background-color 0.25s;
+    border-radius: 5px;
+}
+.admin-room:hover {
+    background-color: rgb(233 233 233);
 }

@@ -135,7 +135,7 @@ class Owner
 
     public function __toString()
     {
-        return $this->firstname;
+        return $this->firstname. ' '. $this->lastname;
     }
 
     public function owns(Room $room)
