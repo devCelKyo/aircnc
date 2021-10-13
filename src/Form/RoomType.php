@@ -32,7 +32,6 @@ class RoomType extends AbstractType
             ->add('superficy', TextType::class)
             ->add('price', TextType::class)
             ->add('address', TextType::class)
-            ->add('regions', ChoiceType::class, ['choices' => $regions, 'choice_label' => function (?Region $region) { return $region->getName(); }, 'expanded' => false, 'multiple' => true, 'mapped' => false])
             ->add('imageFile', VichImageType::class, ['required' => false, 'mapped' => false])
             ->add('submit', SubmitType::class)
 

@@ -36,6 +36,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+    public function findAdmins()
+    {
+        $users = $this->findAll();
+        $admins = array();
+
+        foreach($users as $user) {
+            if (in_array('ROLE_ADMIN', $user->getRoles()) && !in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
+                $admins[] = $user;
+            }
+        }
+
+        return $admins;
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

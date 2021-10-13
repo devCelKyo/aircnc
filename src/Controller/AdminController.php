@@ -12,10 +12,14 @@ use App\Repository\OwnerRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\CommentaireRepository;
 use App\Repository\UserRepository;
+use App\Form\UserType;
+use App\Form\OwnerType;
+use App\Form\RoomType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/backoffice")
@@ -68,7 +72,18 @@ class AdminController extends AbstractController
      */
     public function edit(Request $request, Room $room): Response
     {
-        //
+        $form = $this->createForm(RoomType::class, $room);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $room->setImageFile($form->get('imageFile')->getData());
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->get('session')->getFlashBag()->add('message', 'La chambre a bien été éditée.');
+            return $this->redirectToRoute('admin_rooms');
+        }
+
+        return $this->render('admin/room_edit.html.twig', ['room' => $room, 'form' => $form->createView()]);
     }
 
     /**
@@ -158,7 +173,17 @@ class AdminController extends AbstractController
      */
     public function ownerEdit(Request $request, Owner $owner): Response
     {
+        $form = $this->createForm(OwnerType::class, $owner);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->get('session')->getFlashBag()->add('message', 'Le propriétaire a bien été édité.');
+            return $this->redirectToRoute('admin_owners');
+        }
+
+        return $this->render('admin/owner_edit.html.twig', ['owner' => $owner, 'form' => $form->createView()]);
     }
 
     /**
@@ -178,8 +203,24 @@ class AdminController extends AbstractController
      * @Route("/superadmin", name="superadmin", methods={"GET", "POST"})
      * @IsGranted("ROLE_SUPER_ADMIN")
      */
-    public function superadmin(Request $request, UserRepository $userRepository): Response
+    public function superadmin(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Compte crée avec succès.');
+            return $this->redirectToRoute('superadmin', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $admins = $userRepository->findAdmins();
+        return $this->render('admin/superadmin.html.twig', ['admins' => $admins, 'form' => $form->createView()]);
     }
 }
