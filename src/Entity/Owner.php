@@ -140,6 +140,6 @@ class Owner
 
     public function owns(Room $room)
     {
-        return in_array($room, $this->getRooms());
+        return in_array($room, $this->getRooms()->toArray());
     }
 }

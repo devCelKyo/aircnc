@@ -3,42 +3,81 @@
 {% block title %}Room{% endblock %}
 
 {% block body %}
-    <h1>Room</h1>
+<div class="container main-container mt-4">
+    <h2 class="page-title">{{ room.summary }}</h1>
+    <div class="row mb-2">
+    <div class="col-lg-12">
+        <div class="card widget-flat">
+        <div class="card-body">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ room.id }}</td>
+                </tr>
+                <tr>
+                    <th>Summary</th>
+                    <td>{{ room.summary }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ room.description }}</td>
+                </tr>
+                <tr>
+                    <th>Capacity</th>
+                    <td>{{ room.capacity }}</td>
+                </tr>
+                <tr>
+                    <th>Superficy</th>
+                    <td>{{ room.superficy }}</td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td>{{ room.price }}</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>{{ room.address }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-primary" role="button" href="{{ path('room_index') }}">Retour à la liste</a>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ room.id }}</td>
-            </tr>
-            <tr>
-                <th>Summary</th>
-                <td>{{ room.summary }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ room.description }}</td>
-            </tr>
-            <tr>
-                <th>Capacity</th>
-                <td>{{ room.capacity }}</td>
-            </tr>
-            <tr>
-                <th>Superficy</th>
-                <td>{{ room.superficy }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ room.price }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ room.address }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <a class="btn btn-primary" role="button" href="{{ path('room_edit', {'id': room.id}) }}">Éditer</a>
+        </div>
+        </div>
+    </div>   
+    </div>
 
-    <a href="{{ path('room_index') }}">back to list</a>
+    <div class="row">
+        <h2 class="page-title">Commentaires à confirmer</h2>
+        <div class="col-lg-12">
+            {% if commentaires %}
+            <div class="card widget-flat">
+                <div class="card-body">
+                    <table class="table table-borderless table-centered mb-0">
+                    <tbody>
+                    {% for commentaire in commentaires %}
+                        <tr>
+                            <td>{{ commentaire.id }}</td>
+                            <td>{{ commentaire.content }}<br><span class="text-muted font-13">Contenu</span></td>
+                            <td>{{ commentaire.note }}/5<br><span class="text-muted font-13">Note</span></td>
+                            <td>{{ commentaire.author }}<br><span class="text-muted font-13">Auteur</span></td>
+                            <td>{{ commentaire.date|date("d/m/Y") }}<br><span class="text-muted font-13">Date</span></td>
+                            <td><a href="{{ path('room_commentaire_accept', {'id': commentaire.id}) }}" class="btn btn-success" role="button">Accepter</a> <a href="{{ path('room_commentaire_report', {'id': commentaire.id}) }}" class="btn btn-danger" role="button">Signaler</a></td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                Pas de commentaire à confirmer.
+            </div>
+            {% endif %}
+        </div>
+    </div>
 
-    <a href="{{ path('room_edit', {'id': room.id}) }}">edit</a>
+
+</div>
 {% endblock %}
