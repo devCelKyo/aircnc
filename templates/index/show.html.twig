@@ -12,7 +12,14 @@
 <a class="btn btn-success" href="{{ path('home_reservation', {'id': room.id}) }}" role="button">Réserver</a>
 
 <h1>Commentaires</h1>
+
+{% if canComment == 1 %}
 {{ form(form) }}
+{% else %}
+<div class="alert alert-info">
+    {% if canComment == 0 %}Vous devez réserver pour pouvoir commenter.{% else %}Vous ne pouvez commenter qu'une seule fois{% endif %}
+</div>
+{% endif %} 
 {% for commentaire in commentaires %}
 <div class="commentaire-block">
 <span class="author-span">{{ commentaire.author }}</span> : {{ commentaire.content }}

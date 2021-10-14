@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/backoffice")
@@ -45,7 +46,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/rooms", name="admin_rooms")
+     * @Route("/rooms/", name="admin_rooms")
      */
     public function rooms(RoomRepository $roomRepository): Response
     {
@@ -55,7 +56,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/rooms/delete/{id}", name="admin_room_delete")
+     * @Route("/rooms/delete/{id}/", name="admin_room_delete")
      */
     public function delete(Request $request, Room $room): Response
     {
@@ -68,7 +69,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/rooms/edit/{id}", name="admin_room_edit", methods={"GET", "POST"})
+     * @Route("/rooms/edit/{id}/", name="admin_room_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Room $room): Response
     {
@@ -83,11 +84,11 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('admin_rooms');
         }
 
-        return $this->render('admin/room_edit.html.twig', ['room' => $room, 'form' => $form->createView()]);
+        return $this->render('admin/_edit.html.twig', ['room' => $room, 'form' => $form->createView()]);
     }
 
     /**
-     * @Route("/reservations", name="admin_reservations")
+     * @Route("/reservations/", name="admin_reservations")
      */
     public function reservations(ReservationRepository $reservationRepository): Response
     {
@@ -97,7 +98,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/reservations/validate/{id}", name="admin_reservation_validate")
+     * @Route("/reservations/validate/{id}/", name="admin_reservation_validate")
      */
     public function validate(Reservation $reservation): Response
     {
@@ -110,7 +111,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/reservations/cancel/{id}", name="admin_reservation_cancel")
+     * @Route("/reservations/cancel/{id}/", name="admin_reservation_cancel")
      */
     public function cancel(Reservation $reservation): Response
     {
@@ -123,7 +124,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/moderation", name="admin_moderation")
+     * @Route("/moderation/", name="admin_moderation")
      */
     public function moderation(CommentaireRepository $commentaireRepository): Response
     {
@@ -133,7 +134,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/moderation/confirm/{id}", name="admin_moderation_confirm")
+     * @Route("/moderation/confirm/{id}/", name="admin_moderation_confirm")
      */
     public function confirm(Commentaire $commentaire): Response
     {
@@ -146,7 +147,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/moderation/delete/{id}", name="admin_moderation_delete")
+     * @Route("/moderation/delete/{id}/", name="admin_moderation_delete")
      */
     public function deleteCom(Commentaire $commentaire): Response
     {
@@ -159,7 +160,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/owners", name="admin_owners")
+     * @Route("/owners/", name="admin_owners")
      */
     public function showOwners(OwnerRepository $ownerRepository): Response
     {
@@ -169,25 +170,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/owners/edit/{id}", name="admin_owner_edit", methods={"GET", "POST"})
-     */
-    public function ownerEdit(Request $request, Owner $owner): Response
-    {
-        $form = $this->createForm(OwnerType::class, $owner);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            $this->get('session')->getFlashBag()->add('message', 'Le propriétaire a bien été édité.');
-            return $this->redirectToRoute('admin_owners');
-        }
-
-        return $this->render('admin/owner_edit.html.twig', ['owner' => $owner, 'form' => $form->createView()]);
-    }
-
-    /**
-     * @Route("/owners/delete/{id}", name="admin_owner_delete")
+     * @Route("/owners/delete/{id}/", name="admin_owner_delete")
      */
     public function ownerDelete(Owner $owner): Response
     {
@@ -200,7 +183,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/superadmin", name="superadmin", methods={"GET", "POST"})
+     * @Route("/superadmin/", name="superadmin", methods={"GET", "POST"})
      * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function superadmin(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder): Response
@@ -211,16 +194,54 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
+            $user->addRole('ROLE_ADMIN');
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Compte crée avec succès.');
+            $this->get('session')->getFlashBag()->add('message', 'Compte crée avec succès.');
             return $this->redirectToRoute('superadmin', [], Response::HTTP_SEE_OTHER);
         }
 
         $admins = $userRepository->findAdmins();
         return $this->render('admin/superadmin.html.twig', ['admins' => $admins, 'form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/superadmin/edit/{id}/", name="superadmin_edit", methods={"GET", "POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function superadminEdit(Request $request, User $admin, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        $form = $this->createForm(UserType::class, $admin);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $admin->setPassword($passwordEncoder->encodePassword($admin, $form->get('password')->getData()));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($admin);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('message', 'Le compte collaborateur a bien été édité');
+            return $this->redirectToRoute('superadmin');
+        }
+
+        return $this->render('admin/_edit.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/superadmin/delete/{id}/", name="superadmin_delete")
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function superadminDelete(Request $request, User $admin): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($admin);
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', 'Le compte collaborateur a bien été supprimé.');
+        return $this->redirectToRoute('superadmin');
     }
 }

@@ -3,10 +3,23 @@
 {% block title %}Aircnc - Couettes et Cafés à la demande{% endblock %}
 
 {% block body %}
-<h1>Hello !</h1>
-
-{% for region in regions %}
-<h1><a href="{{ path('home_room', {'region': region.name}) }}">{{ region.name }}</a></h1>
-{% endfor %}
-
+<div class="jumbotron jumbotron-fluid pt-3 pb-3" id="hero">
+    <div class="container">
+        <h1 class="display-4 hero-title">Bienvenue sur AirCNC</h1>
+        <p class="lead hero-text">Faites des réservations blablabla lorem ipsum machin chouette</p>
+    </div>
+</div>
+<div class="container main-container mt-4">
+<h2 class="page-title">Découvrez nos régions</h2>
+<div class="card-deck">
+    {% for region in regions %}
+    <div class="card widget-flat region-card">
+    <div class="card-body">
+        <h2 class="card-title"><a href="{{ path('home_room', {'region': region.name}) }}">{{ region.name }}</a></h1>
+        <p class="card-text">{{ region.presentation }}</p>
+    </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
 {% endblock %}

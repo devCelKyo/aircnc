@@ -143,7 +143,7 @@ class Client
         $reservations = $this->getReservations();
 
         foreach($reservations as $reservation) {
-            if ($reservation->getRoom() == $room) {
+            if ($reservation->getRoom() == $room && $reservation->getConfirmed(true)) {
                 return true;
             }
         }
@@ -191,7 +191,6 @@ class Client
 
     public function canCommentOn(Room $room)
     {
-        // Renvoie 0 si le client n'a pas réservé, 2 s'il a déjà commenté, 1 si c'est bon
         if (!$this->hasReserved($room)) {
             return 0;
         }

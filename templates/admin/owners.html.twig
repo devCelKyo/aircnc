@@ -18,7 +18,7 @@
                             <td>{{ owner }}<br><span class="text-muted font-13">Propriétaire</span></td>
                             <td>{{ owner.country }}<br><span class="text-muted font-13">Pays</span></td>
                             <td>{{ owner.address }}<br><span class="text-muted font-13">Adresse</span></td>
-                            <td><a href="{{ path('admin_owner_edit', {'id': owner.id}) }}" class="btn btn-primary" role="button">Éditer</a> <a href="{{ path('admin_owner_delete', {'id': owner.id}) }}" class="btn btn-danger" role="button">Supprimer</a></td>
+                            <td><a href="{{ path('admin_owner_delete', {'id': owner.id}) }}" class="btn btn-danger" role="button">Supprimer</a></td>
                         </tr>
                     {% endfor %}
                     </table>

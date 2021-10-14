@@ -1,0 +1,20 @@
+.bg-cnc {
+    background-color: white;
+    box-shadow: 0px 5px 5px 0px rgba(31,31,31,0.3);
+}
+body {
+    min-height: 100vh;
+    background-color: #f5f4f8;
+}
+.hero-title {
+    color: white;
+}
+.hero-text {
+    color: white;
+}
+.jumbotron {
+    background-color: rgb(81, 81, 252);
+}
+.widget-flat {
+    border: 0;
+}

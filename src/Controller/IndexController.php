@@ -73,8 +73,9 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('home_room_show', ['id' => $room->getId()]);
         }
 
-        $commentaires = $commentaireRepository->findBy(['room' => $room]);
-        return $this->render('index/show.html.twig', ['room' => $room, 'region' => $room->getRegions()[0], 'form' => $form->createView(), 'commentaires' => $commentaires]);
+        $commentaires = $commentaireRepository->findBy(['room' => $room, 'status' => 'VALIDE']);
+        return $this->render('index/show.html.twig', ['room' => $room, 'region' => $room->getRegions()[0], 'form' => $form->createView(), 'commentaires' => $commentaires, 
+                            'canComment' => $this->getUser()->getClient()->canCommentOn($room)]);
     }
 
     /**
