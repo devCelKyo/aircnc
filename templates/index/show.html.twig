@@ -3,26 +3,63 @@
 {% block title %}{{ room.summary }}{% endblock %}
 
 {% block body %}
-<h1>{{ room.summary }}</h1>
-<div style="width: 15em">
-    <img class="img-fluid" src="{{ vich_uploader_asset(room, 'imageFile') }}" />
-</div>
+<div class="container main-container">
+    <h1>{{ room.summary }}</h1>
+    <div style="width: 15em">
+        <img class="img-fluid" src="{{ vich_uploader_asset(room, 'imageFile') }}" />
+    </div>
 
-<p>{{ room.description }}</p>
-<a class="btn btn-success" href="{{ path('home_reservation', {'id': room.id}) }}" role="button">Réserver</a>
+    <div class="card widget-flat">
+        <div class="card-body">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ room.id }}</td>
+                </tr>
+                <tr>
+                    <th>Summary</th>
+                    <td>{{ room.summary }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ room.description }}</td>
+                </tr>
+                <tr>
+                    <th>Capacity</th>
+                    <td>{{ room.capacity }} personne(s)</td>
+                </tr>
+                <tr>
+                    <th>Superficy</th>
+                    <td>{{ room.superficy }}m²</td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td>{{ room.price }}€ par nuit</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>{{ room.address }}</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        </div>
+    <a class="btn btn-success" href="{{ path('home_reservation', {'id': room.id}) }}" role="button">Réserver</a>
 
-<h1>Commentaires</h1>
+    <h1>Commentaires</h1>
 
-{% if canComment == 1 %}
-{{ form(form) }}
-{% else %}
-<div class="alert alert-info">
-    {% if canComment == 0 %}Vous devez réserver pour pouvoir commenter.{% else %}Vous ne pouvez commenter qu'une seule fois{% endif %}
+    {% if canComment == 1 %}
+    {{ form(form) }}
+    {% else %}
+    <div class="alert alert-info">
+        {% if canComment == 0 %}Vous devez réserver pour pouvoir commenter.{% else %}Vous ne pouvez commenter qu'une seule fois{% endif %}
+    </div>
+    {% endif %} 
+    {% for commentaire in commentaires %}
+    <div class="commentaire-block">
+    <span class="author-span">{{ commentaire.author }}</span> : {{ commentaire.content }}
+    </div>
+    {% endfor %}
 </div>
-{% endif %} 
-{% for commentaire in commentaires %}
-<div class="commentaire-block">
-<span class="author-span">{{ commentaire.author }}</span> : {{ commentaire.content }}
-</div>
-{% endfor %}
 {% endblock %}

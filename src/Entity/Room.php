@@ -203,6 +203,7 @@ class Room
 
     public function addRegion(Region $region): self
     {
+        $region->addRoom($this);
         if (!$this->regions->contains($region)) {
             $this->regions[] = $region;
         }

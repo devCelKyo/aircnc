@@ -21,10 +21,10 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $user = new User();
-        $user->setEmail("truc@truc.com");
+        $user->setEmail("super_admin@truc.com");
         $user->setFirstname('A');
         $user->setLastname('B');
-        $user->setUsername('Nadir');
+        $user->setUsername('Admin');
         $user->setPassword($this->encoder->encodePassword($user, 'password'));
         $user->addRole('ROLE_SUPER_ADMIN');
 
@@ -45,10 +45,10 @@ class UserFixtures extends Fixture
         $manager->flush();
 
         $user = new User();
-        $user->setEmail("truc2@truc.com");
-        $user->setFirstname('A');
-        $user->setLastname('B');
-        $user->setUsername('Nadir2');
+        $user->setEmail("user@truc.com");
+        $user->setFirstname('A2');
+        $user->setLastname('B2');
+        $user->setUsername('User');
         $user->setPassword($this->encoder->encodePassword($user, 'password'));
 
         $owner = new Owner();

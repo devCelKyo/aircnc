@@ -6,6 +6,7 @@ use App\Entity\Room;
 use App\Entity\Commentaire;
 use App\Form\RoomType;
 use App\Repository\RoomRepository;
+use App\Repository\RegionRepository;
 use App\Repository\CommentaireRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,13 +41,15 @@ class RoomController extends AbstractController
     /**
      * @Route("/new", name="room_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, RegionRepository $regionRepository): Response
     {
         $room = new Room();
         $form = $this->createForm(RoomType::class, $room);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $regions = $form->get('regions')->getData();
+            $room->addRegion($regions);
             $room->setImageFile($form->get('imageFile')->getData());
 
             $room->setOwner($this->getUser()->getOwner());
@@ -55,6 +58,7 @@ class RoomController extends AbstractController
             $entityManager->persist($room);
             $entityManager->flush();
 
+            $this->get('session')->getFlashBag()->add('message', $regions);
             return $this->redirectToRoute('room_index', [], Response::HTTP_SEE_OTHER);
         }
 

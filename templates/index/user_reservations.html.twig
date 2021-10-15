@@ -5,7 +5,9 @@
 {% block body %}
 {% if reservations %}
 {% for reservation in reservations %}
+<div class="card widget-flat">
 <h1><a href="{{ path('home_room_show', {'id': reservation.getRoom.getId}) }}">{{ reservation.getRoom.getSummary }}</a> - Confirmé : {{ reservation.confirmed }}</h1>
+</div>
 {% endfor %}
 
 {% else %}
